@@ -1,7 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var Post = require('./models/post');
 
 var app = express();
+
+var mongoDB = 'mongodb://localhost/meanProject';
+mongoose.connect(mongoDB, { useNewUrlParser: true }).then(() => {
+    console.log("connected to databse!");
+});
 
 
 app.use(bodyParser.json());
@@ -13,7 +20,11 @@ app.use((req, res, next) => {
 });
 
 app.post("/posts", (req, res, next) => {
-    const post = req.body;
+    const post = new Post({
+        title: req.body.title,
+        content : req.body.content
+    });
+    post.save();
     console.log(post);
     res.status(201).json({
         message: 'Post added successfully!'
