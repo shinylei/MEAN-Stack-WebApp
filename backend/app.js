@@ -10,7 +10,6 @@ mongoose.connect(mongoDB, { useNewUrlParser: true }).then(() => {
     console.log("connected to databse!");
 });
 
-
 app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -25,29 +24,19 @@ app.post("/posts", (req, res, next) => {
         content : req.body.content
     });
     post.save();
-    console.log(post);
     res.status(201).json({
         message: 'Post added successfully!'
     });
 });
 
 app.get('/posts', (req, res, next) => {
-    const posts = [
-        {
-            id: 'easdfds',
-            title: 'First',
-            content: 'First Content',
-        },
-        {
-            id: 'easdfds',
-            title: 'Sirst',
-            content: 'Sirst Content',
-        },
-    ]
-    res.status(200).json({
-        message: 'Success',
-        posts: posts
-    });
+    Post.find().then((data) => {
+        res.status(200).json({
+            message: 'Success',
+            posts: data
+        });
+    })
+    
 });
 
 module.exports = app;
