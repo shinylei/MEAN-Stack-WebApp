@@ -43,4 +43,17 @@ export class PostsService{
             this.postsUpdated.next([...this.posts]);
         });
     }
+
+    getPostById(id: string) {
+        return {...this.posts.find(post => post._id === id)};
+    }
+
+    updatePost(postId: string, title: string, content: string){
+        const updatedPost: Post = {
+            _id:postId,
+            title: title,
+            content: content
+        };
+        this.http.put("http://localhost:3000/posts/" + postId, updatedPost).subscribe(response => console.log(response));
+    }
 }
