@@ -23,8 +23,11 @@ ngOnInit() {
   this.postsService.getPost();
   this.postsSub = this.postsService.getPostUpdateListener().subscribe((posts: Post[]) => {
     this.posts = posts;
-  });
-  
+  }); 
+}
+
+onDelete(postId : string) {
+  this.postsService.deletePost(postId);
 }
 
 ngOnDestroy() {
