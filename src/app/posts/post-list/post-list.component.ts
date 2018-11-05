@@ -20,7 +20,7 @@ posts :Post[] = [];
 private postsSub : Subscription;
 
 ngOnInit() {
-  this.postsService.getPost();
+  this.postsService.getPosts();
   this.postsSub = this.postsService.getPostUpdateListener().subscribe((posts: Post[]) => {
     this.posts = posts;
   }); 

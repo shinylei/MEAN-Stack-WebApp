@@ -12,7 +12,7 @@ export class PostsService{
 
     constructor(private http: HttpClient){}
 
-    getPost() {
+    getPosts() {
         this.http.get<{message:string, posts: Post[]}>('http://localhost:3000/posts')
         .subscribe((postData) => {
             this.posts = postData.posts;
@@ -44,8 +44,8 @@ export class PostsService{
         });
     }
 
-    getPostById(id: string) {
-        return {...this.posts.find(post => post._id === id)};
+    getPost(id: string) {
+        return this.http.get<Post>("http://localhost:3000/posts/" + id);
     }
 
     updatePost(postId: string, title: string, content: string){

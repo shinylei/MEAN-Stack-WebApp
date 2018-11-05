@@ -2,7 +2,7 @@
     <form #inputPost="ngForm" (submit)="onSavePost(inputPost)">
         <mat-form-field>
             <input matInput type="text" 
-                [ngModel]="post.title"
+                [ngModel]="post?.title"
                 name="title"
                 required
                 placeholder="Post Title"
@@ -12,7 +12,7 @@
         </mat-form-field>
         <mat-form-field>
             <textarea matInput rows="5" 
-                [ngModel]="post.content"
+                [ngModel]="post?.content"
                 name="content"
                 required
                 placeholder="Post content"
