@@ -38,11 +38,13 @@ export class PostCreateComponent implements OnInit{
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
         this.postsService.getPost(this.postId).subscribe(data => {
-          this.post = {_id: data._id, title: data.title, content: data.content, imagePath: null};
+          this.post = {_id: data._id, title: data.title, content: data.content, imagePath: data.imagePath};
+          //populate the form with initial value
           this.form.setValue({
             title: this.post.title,
-            content: this.post.content
-          });//populate the form with initial value
+            content: this.post.content,
+            image: this.post.imagePath
+          });
         });
       } else {
         this.mode = 'create';
@@ -58,7 +60,7 @@ export class PostCreateComponent implements OnInit{
     if (this.mode === 'create') {
       this.postsService.addPost(this.form.value.title, this.form.value.content, this.form.value.image);
     } else {
-      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content);
+      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content, this.form.value.image);
     }
     this.form.reset();
   }

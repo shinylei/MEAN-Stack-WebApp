@@ -53,17 +53,32 @@ export class PostsService{
         return this.http.get<Post>("http://localhost:3000/posts/" + id);
     }
 
-    updatePost(postId: string, title: string, content: string){
-        const updatedPost: Post = {
-            _id:postId,
-            title: title,
-            content: content,
-            imagePath: null,
-        };
-        this.http.put("http://localhost:3000/posts/" + postId, updatedPost).subscribe(response => {
+    updatePost(postId: string, title: string, content: string, image: File | string){
+        let postData: Post | FormData;
+        if (typeof(image) === 'object') {
+            postData = new FormData();
+            postData.append("title", title);
+            postData.append("content", content);
+            postData.append("image", image, title);
+            postData.append("_id", postId);
+        } else {
+            postData = {
+                _id: postId,
+                title: title,
+                content: content,
+                imagePath: image,
+            }
+        }
+        this.http.put<{message: string, imagePath: string}>("http://localhost:3000/posts/" + postId, postData).subscribe(response => {
+            const post = {
+                _id:postId,
+                title: title,
+                content: content,
+                imagePath: response.imagePath,
+            }
             const updatedPosts = [...this.posts];
             const index = updatedPosts.findIndex(p => p._id === postId);
-            updatedPosts[index] = updatedPost;
+            updatedPosts[index] = post;
             this.posts = updatedPosts;
             this.postsUpdated.next([...this.posts]);
             this.router.navigate(['/']);
