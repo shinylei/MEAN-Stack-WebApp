@@ -59,7 +59,7 @@ router.post("", multer({storage: storage}).single("image"),(req, res, next) => {
             message: 'Post added successfully!',
             post: {
                 _id: result._id,
-                ...result,
+                ...post
             }
         });
     });

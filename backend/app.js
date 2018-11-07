@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+const path = require('path')
 const postsRoutes = require('./routes/posts');
 var app = express();
 
@@ -11,6 +11,8 @@ mongoose.connect(mongoDB, { useNewUrlParser: true }).then(() => {
 });
 
 app.use(bodyParser.json());
+app.use("/images", express.static(path.join("backend/images")));
+
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
