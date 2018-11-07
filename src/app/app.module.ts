@@ -14,6 +14,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { AppRoutingModule } from './app-routing.module';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatExpansionModule,
     HttpClientModule,
     AppRoutingModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

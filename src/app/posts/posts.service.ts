@@ -9,15 +9,16 @@ import { Router } from "@angular/router";
 })
 export class PostsService{
     private posts : Post[] = [];
-    private postsUpdated = new Subject<Post[]>()
+    private postsUpdated = new Subject<{posts: Post[], postCount: number}>()
 
     constructor(private http: HttpClient, private router: Router){}
 
-    getPosts() {
-        this.http.get<{message:string, posts: Post[]}>('http://localhost:3000/posts')
+    getPosts(postsPerPage: number, currentPage: number) {
+        const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`
+        this.http.get<{message:string, posts: Post[], maxPosts:number}>('http://localhost:3000/posts' + queryParams)
         .subscribe((postData) => {
             this.posts = postData.posts;
-            this.postsUpdated.next([...this.posts]);
+            this.postsUpdated.next({posts: [...this.posts],postCount: postData.maxPosts});
         });
         
     }
@@ -33,20 +34,13 @@ export class PostsService{
         postData.append("image", image, title);
 
         this.http.post<{message:string, post: Post}>('http://localhost:3000/posts', postData).subscribe((responseData) => {
-            const post = {_id: responseData.post._id, title: title, content: content, imagePath: responseData.post.imagePath};
-            this.posts.push(post);
-            this.postsUpdated.next([...this.posts]);
             this.router.navigate(['/']);
         });
         
     }
 
     deletePost(postId: string) {
-        this.http.delete("http://localhost:3000/posts/" + postId).subscribe(() => {
-            const updatedPosts = this.posts.filter((post) => post._id != postId);
-            this.posts = updatedPosts;
-            this.postsUpdated.next([...this.posts]);
-        });
+        return this.http.delete("http://localhost:3000/posts/" + postId);
     }
 
     getPost(id: string) {
@@ -70,17 +64,6 @@ export class PostsService{
             }
         }
         this.http.put<{message: string, imagePath: string}>("http://localhost:3000/posts/" + postId, postData).subscribe(response => {
-            const post = {
-                _id:postId,
-                title: title,
-                content: content,
-                imagePath: response.imagePath,
-            }
-            const updatedPosts = [...this.posts];
-            const index = updatedPosts.findIndex(p => p._id === postId);
-            updatedPosts[index] = post;
-            this.posts = updatedPosts;
-            this.postsUpdated.next([...this.posts]);
             this.router.navigate(['/']);
         });
     }
