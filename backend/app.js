@@ -1,11 +1,14 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-const path = require('path')
-const postsRoutes = require('./routes/posts');
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const path = require('path');
 
-var mongoDB = 'mongodb://localhost/meanProject';
+const postsRoutes = require('./routes/posts');
+const userRoutes = require('./routes/user'); 
+
+const app = express();
+
+const mongoDB = 'mongodb://localhost/meanProject';
 mongoose.connect(mongoDB, { useNewUrlParser: true }).then(() => {
     console.log("connected to databse!");
 });
@@ -21,5 +24,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/posts", postsRoutes);
+app.use('/user', userRoutes);
 
 module.exports = app;
