@@ -38,7 +38,7 @@ export class PostCreateComponent implements OnInit{
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
         this.postsService.getPost(this.postId).subscribe(data => {
-          this.post = {_id: data._id, title: data.title, content: data.content};
+          this.post = {_id: data._id, title: data.title, content: data.content, imagePath: null};
           this.form.setValue({
             title: this.post.title,
             content: this.post.content
@@ -56,7 +56,7 @@ export class PostCreateComponent implements OnInit{
       return;
     }
     if (this.mode === 'create') {
-      this.postsService.addPost(this.form.value.title, this.form.value.content);
+      this.postsService.addPost(this.form.value.title, this.form.value.content, this.form.value.image);
     } else {
       this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content);
     }
@@ -67,7 +67,6 @@ export class PostCreateComponent implements OnInit{
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({image: file});
     this.form.get('image').updateValueAndValidity();
-    // console.log(file);
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result;

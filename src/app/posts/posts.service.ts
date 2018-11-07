@@ -26,11 +26,14 @@ export class PostsService{
         return this.postsUpdated.asObservable();
     }
 
-    addPost (title:string, content:string) {
-        const post: Post = {_id: 'id', title: title, content: content};
-        this.http.post<{message:string, postId: string}>('http://localhost:3000/posts', post).subscribe((responseData) => {
-            post._id = responseData.postId;
-            console.log(responseData);
+    addPost (title:string, content:string, image: File) {
+        const postData = new FormData();
+        postData.append("title", title);
+        postData.append("content", content);
+        postData.append("image", image, title);
+
+        this.http.post<{message:string, post: Post}>('http://localhost:3000/posts', postData).subscribe((responseData) => {
+            const post = {_id: responseData.post._id, title: title, content: content, imagePath: responseData.post.imagePath};
             this.posts.push(post);
             this.postsUpdated.next([...this.posts]);
             this.router.navigate(['/']);
@@ -54,7 +57,8 @@ export class PostsService{
         const updatedPost: Post = {
             _id:postId,
             title: title,
-            content: content
+            content: content,
+            imagePath: null,
         };
         this.http.put("http://localhost:3000/posts/" + postId, updatedPost).subscribe(response => {
             const updatedPosts = [...this.posts];
