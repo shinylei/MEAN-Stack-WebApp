@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
@@ -15,6 +15,8 @@ import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { AppRoutingModule } from './app-routing.module';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { loginComponent } from './auth/login/login.component';
+import { signupComponent } from './auth/signup/signup.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     AppComponent,
     PostCreateComponent,
     HeaderComponent,
-    PostListComponent
+    PostListComponent,
+    loginComponent,
+    signupComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +40,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     HttpClientModule,
     AppRoutingModule,
     MatPaginatorModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
