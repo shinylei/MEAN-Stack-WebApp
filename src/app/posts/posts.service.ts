@@ -61,6 +61,7 @@ export class PostsService{
                 title: title,
                 content: content,
                 imagePath: image,
+                creator: null
             }
         }
         this.http.put<{message: string, imagePath: string}>("http://localhost:3000/posts/" + postId, postData).subscribe(response => {

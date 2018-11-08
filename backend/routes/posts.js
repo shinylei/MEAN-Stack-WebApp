@@ -68,9 +68,10 @@ router.post("",checkAuth, multer({storage: storage}).single("image"),(req, res, 
     const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        imagePath: url + '/images/' + req.file.filename
+        imagePath: url + '/images/' + req.file.filename,
+        creator: req.userData.userId
     });
-    post.save().then(result => {
+    post.save().then(res => {
         res.status(201).json({
             message: 'Post added successfully!',
             post: {
@@ -78,19 +79,22 @@ router.post("",checkAuth, multer({storage: storage}).single("image"),(req, res, 
                 ...post
             }
         });
-    });
-    
+    });    
 });
 
 router.delete('/:id', checkAuth,(req, res, next) => {
     // console.log(req.params.id);
-    Post.deleteOne({_id: req.params.id}).then(result => {
-        console.log(result);
-        res.status(200).json({message: "Post deleted!"});
+    Post.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(result => {
+        if (result.n > 0) {
+            res.status(200).json({message: "Post deleted!"});
+        } else {
+            res.status(401).json({message: "Not authorized!"});
+        }
+        
     });
 });
 
-router.put('/:id',checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
+router.put('/:id', checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
     let imagePath = req.body.imagePath;
     if (req.file) {
         const url = req.protocol + '://' + req.get('host');
@@ -101,11 +105,15 @@ router.put('/:id',checkAuth, multer({storage: storage}).single("image"), (req, r
         title: req.body.title,
         content: req.body.content,
         imagePath: imagePath,
+        creator: req.userData.userId
     });
     console.log(post);
-    Post.updateOne({_id: req.params.id}, post).then(result => {
-        console.log(result);
-        res.status(200).json({message: "Post Edited", imagePath: imagePath});
+    Post.updateOne({_id: req.params.id, creator: req.userData.userId}, post).then(result => {
+        if (result.nModified > 0) {
+            res.status(200).json({message: "Post Edited", imagePath: imagePath});
+        } else {
+            res.status(401).json({message: "Not authorized!"});
+        }
     });
 });
 

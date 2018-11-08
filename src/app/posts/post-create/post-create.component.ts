@@ -38,7 +38,7 @@ export class PostCreateComponent implements OnInit{
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
         this.postsService.getPost(this.postId).subscribe(data => {
-          this.post = {_id: data._id, title: data.title, content: data.content, imagePath: data.imagePath};
+          this.post = {_id: data._id, title: data.title, content: data.content, imagePath: data.imagePath, creator:data.creator};
           //populate the form with initial value
           this.form.setValue({
             title: this.post.title,

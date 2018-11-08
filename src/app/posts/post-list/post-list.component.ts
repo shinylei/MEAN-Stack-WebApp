@@ -26,15 +26,18 @@ currentPage = 1;
 pageSizeOptions = [1, 2, 5, 10];
 private authListenerSubs: Subscription;
 userIsAuthenticated = false;
+userId: string;
 
 ngOnInit() {
   this.postsService.getPosts(this.postsPerPage, this.currentPage);
+  this.userId = this.authService.getUserId();
   this.postsSub = this.postsService.getPostUpdateListener().subscribe((postData: {posts: Post[],postCount: number}) => {
     this.posts = postData.posts;
     this.totalPosts = postData.postCount;
   }); 
   this.authListenerSubs = this.authService.getAuthStatusListener().subscribe((status) => {
     this.userIsAuthenticated = status;
+    this.userId = this.authService.getUserId();
   });
   this.userIsAuthenticated = this.authService.getIsAuth();
 }
