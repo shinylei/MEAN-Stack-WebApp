@@ -11,11 +11,18 @@ export class AuthService {
     }
 
     createUser(email: string, password: string) {
-        const authData: AuthData = {email: email, password:password};
+        const authData: AuthData = {email: email, password: password};
         this.http.post('http://localhost:3000/user/signup', authData)
             .subscribe(response => {
                 console.log(response);
             });
+    }
+
+    login(email: string, password: string) {
+        const authData: AuthData = {email: email, password: password};
+        this.http.post('http://localhost:3000/user/login', authData).subscribe((response) => {
+            console.log(response);
+        });
     }
 
 }
