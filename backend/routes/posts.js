@@ -71,7 +71,7 @@ router.post("",checkAuth, multer({storage: storage}).single("image"),(req, res, 
         imagePath: url + '/images/' + req.file.filename,
         creator: req.userData.userId
     });
-    post.save().then(res => {
+    post.save().then(result => {
         res.status(201).json({
             message: 'Post added successfully!',
             post: {
