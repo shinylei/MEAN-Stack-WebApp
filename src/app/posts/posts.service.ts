@@ -3,7 +3,9 @@ import { Injectable } from "@angular/core";
 import {Subject} from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment";
 
+const BACKEND_URL = environment.Url + '/posts';
 @Injectable({
     providedIn: 'root',
 })
@@ -12,10 +14,11 @@ export class PostsService{
     private postsUpdated = new Subject<{posts: Post[], postCount: number}>()
 
     constructor(private http: HttpClient, private router: Router){}
+    
 
     getPosts(postsPerPage: number, currentPage: number) {
         const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`
-        this.http.get<{message:string, posts: Post[], maxPosts:number}>('http://localhost:3000/posts' + queryParams)
+        this.http.get<{message:string, posts: Post[], maxPosts:number}>(BACKEND_URL + queryParams)
         .subscribe((postData) => {
             this.posts = postData.posts;
             this.postsUpdated.next({posts: [...this.posts],postCount: postData.maxPosts});
@@ -33,18 +36,18 @@ export class PostsService{
         postData.append("content", content);
         postData.append("image", image, title);
 
-        this.http.post<{message:string, post: Post}>('http://localhost:3000/posts', postData).subscribe((responseData) => {
+        this.http.post<{message:string, post: Post}>(BACKEND_URL, postData).subscribe((responseData) => {
             this.router.navigate(['/']);
         });
         
     }
 
     deletePost(postId: string) {
-        return this.http.delete("http://localhost:3000/posts/" + postId);
+        return this.http.delete(BACKEND_URL + postId);
     }
 
     getPost(id: string) {
-        return this.http.get<Post>("http://localhost:3000/posts/" + id);
+        return this.http.get<Post>(BACKEND_URL + id);
     }
 
     updatePost(postId: string, title: string, content: string, image: File | string){
@@ -64,7 +67,7 @@ export class PostsService{
                 creator: null
             }
         }
-        this.http.put<{message: string, imagePath: string}>("http://localhost:3000/posts/" + postId, postData).subscribe(response => {
+        this.http.put<{message: string, imagePath: string}>(BACKEND_URL + postId, postData).subscribe(response => {
             this.router.navigate(['/']);
         });
     }
