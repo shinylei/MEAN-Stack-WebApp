@@ -1,12 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatDialogModule} from '@angular/material/dialog';
+
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -21,6 +16,7 @@ import { signupComponent } from './auth/signup/signup.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { ErrorInterceptor } from './err.interceptor';
 import { ErrorComponent } from './error/error.component';
+import { AngularMaterialModule } from './angular-material.module';
 
 
 @NgModule({
@@ -36,17 +32,12 @@ import { ErrorComponent } from './error/error.component';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatExpansionModule,
+    BrowserAnimationsModule,  
     HttpClientModule,
     AppRoutingModule,
     MatPaginatorModule,
-    FormsModule,
-    MatDialogModule
+    FormsModule, 
+    AngularMaterialModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
